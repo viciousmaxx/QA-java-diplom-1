@@ -30,10 +30,10 @@ public class BurgerTest {
                 thenReturn(new Ingredient(SAUCE, "sour cream", 200.00F));
         burger.addIngredient(ingredients.get(0));
 
-        Assert.assertFalse("Перед добавлением ингредиентов - список ингредиентов д.б. пуст", burger.ingredients.isEmpty());
-        Assert.assertTrue("Тип добавляемого ингредиента д.б. SAUCE", burger.ingredients.get(0).getType().equals(SAUCE));
-        Assert.assertTrue("Имя добавляемого ингредиента д.б. 'sour cream'", burger.ingredients.get(0).getName().equals("sour cream"));
-        Assert.assertTrue("Цена добавляемого ингредиента д.б. 200.00", burger.ingredients.get(0).getPrice() == 200.00F);
+        Assert.assertFalse("После добавления ингредиентов - список ингредиентов не д.б. пуст", burger.ingredients.isEmpty());
+        Assert.assertEquals("SAUCE", burger.ingredients.get(0).getType().name());
+        Assert.assertEquals("sour cream", burger.ingredients.get(0).getName());
+        Assert.assertEquals("Цена добавляемого ингредиента д.б. 200.00", 200.00F, burger.ingredients.get(0).getPrice(), 0.0);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class BurgerTest {
         burger.setBuns(buns.get(0));
 
         Assert.assertEquals("Имя добавляемой булки д.б. 'SomeBun'", "SomeBun", burger.bun.getName());
-        Assert.assertTrue("Цена добавляемой булки д.б. '100500.01'", burger.bun.price == 100_500.01F);
+        Assert.assertEquals("Цена добавляемой булки д.б. '100500.01'", 100_500.01F, burger.bun.price, 0.0);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class BurgerTest {
         burger.addIngredient(ingredients.get(0));
         burger.addIngredient(ingredients.get(1));
         burger.moveIngredient(0, 1);
-        Assert.assertTrue("После перемещения - первый по индексу элемент должен стать последним", burger.ingredients.get(1).getName().equals("dinosaur"));
+        Assert.assertEquals("После перемещения - первый по индексу элемент должен стать последним", "dinosaur", burger.ingredients.get(1).getName());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class BurgerTest {
                 thenReturn(new Ingredient(SAUCE, "sour cream", 150.00F));
         burger.addIngredient(ingredients.get(1));
 
-        Assert.assertTrue("Проверка должна возвращать цену 1450", 1451 == burger.getPrice());
+        Assert.assertEquals("Проверка должна возвращать цену 1450", 1451, burger.getPrice(), 0.0);
     }
 
     @Test
@@ -115,25 +115,5 @@ public class BurgerTest {
                 "\r\n" +
                 "Price: 1450.000000\r\n";
         Assert.assertEquals(expected, burger.getReceipt());
-    }
-
-    @Test
-    public void getReceiptVerifyTest() {
-
-        Mockito.when(buns.get(0)).thenReturn(new Bun("SomeBun", 500.00F));
-        burger.setBuns(buns.get(0));
-
-        Mockito.when(ingredients.get(0)).
-                thenReturn(new Ingredient(FILLING, "dinosaur", 300));
-        burger.addIngredient(ingredients.get(0));
-
-        Mockito.when(ingredients.get(1)).
-                thenReturn(new Ingredient(SAUCE, "sour cream", 150.00F));
-        burger.addIngredient(ingredients.get(1));
-        burger.getReceipt();
-
-        Mockito.verify(burger).getReceipt();
-        Mockito.verify(burger).setBuns(buns.get(0));
-        Mockito.verify(burger).addIngredient(ingredients.get(0));
     }
 }
